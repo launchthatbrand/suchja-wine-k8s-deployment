@@ -1,26 +1,26 @@
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: "$Username-$random-nevmerzhitsky"
+  name: "$Username-$random-suchja-wine"
   labels:
-    app: "$Username-$random-nevmerzhitsky"
+    app: "$Username-$random-suchja-wine"
     client: "$Username-$random"
 spec:
   selector:
     matchLabels:
-      app: "$Username-$random-nevmerzhitsky"
+      app: "$Username-$random-suchja-wine"
       client: "$Username-$random"
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: "$Username-$random-nevmerzhitsky"
+        app: "$Username-$random-suchja-wine"
         client: "$Username-$random"
     spec:
       containers:
-      - image: launchthatbrand/nevmerzhitsky-headless-metatrader4:1.0.2
-        name: "$Username-$random-nevmerzhitsky"
+      - image: launchthatbrand/suchja-wine:1.0.0
+        name: "$Username-$random-suchja-wine"
         resources:
           requests:
             memory: "64Mi"
@@ -36,19 +36,32 @@ spec:
         - name: USER_PASSWD
           value: $Password
         volumeMounts:
-        - name: $Username-$random-nevmerzhitsky
+        - name: $Username-$random-suchja-wine
+          mountPath: /home/$Username
+          
+      - image: launchthatbrand/suchja-x11server:1.0.0
+        name: "$Username-$random-suchja-x11server"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "${MEM}Gi"
+            cpu: "${CPU}m"
+        volumeMounts:
+        - name: $Username-$random-suchja-wine
           mountPath: /home/$Username
       volumes:
-      - name: $Username-$random-nevmerzhitsky
+      - name: $Username-$random-suchja-wine
         persistentVolumeClaim:
-          claimName: $Username-$random-nevmerzhitsky
+          claimName: $Username-$random-suchja-wine
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: "$Username-$random-nevmerzhitsky"
+  name: "$Username-$random-suchja-wine"
   labels:
-    app: "$Username-$random-nevmerzhitsky"
+    app: "$Username-$random-suchja-wine"
     client: "$Username-$random"
 spec:
   ports:
@@ -56,16 +69,16 @@ spec:
     protocol: TCP
     targetPort: 5900
   selector:
-    app: "$Username-$random-nevmerzhitsky"
+    app: "$Username-$random-suchja-wine"
     client: "$Username-$random"
   type: $type
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: "$Username-$random-nevmerzhitsky"
+  name: "$Username-$random-suchja-wine"
   labels:
-    app: "$Username-$random-nevmerzhitsky"
+    app: "$Username-$random-suchja-wine"
     client: "$Username-$random"
 spec:
   accessModes:
