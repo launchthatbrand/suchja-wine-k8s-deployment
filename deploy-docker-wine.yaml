@@ -1,26 +1,26 @@
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: "$Username-$random-docker-wine"
+  name: "$Username-$random-nevmerzhitsky"
   labels:
-    app: "$Username-$random-docker-wine"
+    app: "$Username-$random-nevmerzhitsky"
     client: "$Username-$random"
 spec:
   selector:
     matchLabels:
-      app: "$Username-$random-docker-wine"
+      app: "$Username-$random-nevmerzhitsky"
       client: "$Username-$random"
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: "$Username-$random-docker-wine"
+        app: "$Username-$random-nevmerzhitsky"
         client: "$Username-$random"
     spec:
       containers:
-      - image: scottyhardy/docker-wine
-        name: "$Username-$random-docker-wine"
+      - image: launchthatbrand/nevmerzhitsky-headless-metatrader4:1.0.1
+        name: "$Username-$random-nevmerzhitsky"
         resources:
           requests:
             memory: "64Mi"
@@ -29,43 +29,43 @@ spec:
             memory: "${MEM}Gi"
             cpu: "${CPU}m"
         env:
-        - name: RDP_SERVER
+        - name: VNC_SERVER
           value: "yes"
         - name: USER_NAME
           value: $Username
         - name: USER_PASSWD
           value: $Password
         volumeMounts:
-        - name: $Username-$random-docker-wine
+        - name: $Username-$random-nevmerzhitsky
           mountPath: /home/$Username
       volumes:
-      - name: $Username-$random-docker-wine
+      - name: $Username-$random-nevmerzhitsky
         persistentVolumeClaim:
-          claimName: $Username-$random-docker-wine
+          claimName: $Username-$random-nevmerzhitsky
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: "$Username-$random-docker-wine"
+  name: "$Username-$random-nevmerzhitsky"
   labels:
-    app: "$Username-$random-docker-wine"
+    app: "$Username-$random-nevmerzhitsky"
     client: "$Username-$random"
 spec:
   ports:
-  - port: 3389
+  - port: 5900
     protocol: TCP
-    targetPort: 3389
+    targetPort: 5900
   selector:
-    app: "$Username-$random-docker-wine"
+    app: "$Username-$random-nevmerzhitsky"
     client: "$Username-$random"
   type: $type
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: "$Username-$random-docker-wine"
+  name: "$Username-$random-nevmerzhitsky"
   labels:
-    app: "$Username-$random-docker-wine"
+    app: "$Username-$random-nevmerzhitsky"
     client: "$Username-$random"
 spec:
   accessModes:
